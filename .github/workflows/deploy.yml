@@ -1,0 +1,38 @@
+stages:
+  - build
+  - deploy
+
+variables:
+  RENDER_SERVICE_ID: "cs97c968ii6s73ev820g"  # ID du service sur Render
+  RENDER_API_KEY: "rnd_jVLom5W5VJCXweycehqwPCUBoDnk"
+
+build:
+  stage: build
+  image: djelale/assistme:1.0.0  # Utiliser une image appropriée en fonction de ton projet (par ex. Python, Go, etc.)
+  script:
+    - echo "Building client..."
+    - cd client
+    - npm install
+    - npm run build
+
+    - echo "Building server..."
+    - cd ../server
+    - npm install
+    - npm run build
+
+  artifacts:
+    paths:
+      - client/build/  # Spécifiez le chemin du build final du client
+      - server/build/   # Spécifiez le chemin du build final du serveur (si applicable)
+
+deploy:
+  stage: deploy
+  script:
+    - echo "Deploying to Render..."
+    - |
+      curl -X POST "https://api.render.com/v1/services/${RENDER_SERVICE_ID}/deploys" \
+      -H "Authorization: Bearer ${RENDER_API_KEY}" \
+      -H "Content-Type: application/json" \
+      -d '{"clearCache": false}'
+  only:
+    - main  # Déployer seulement quand on pousse sur la branche 'main'
