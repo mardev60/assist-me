@@ -1,4 +1,4 @@
-name: Deployement
+name: Deployment
 
 on:
   push:
@@ -34,7 +34,7 @@ jobs:
       - name: Deploy to Render
         run: |
           echo "Deploying to Render..."
-          curl -X POST "https://api.render.com/v1/services/${{ "cs97c968ii6s73ev820g" }}/deploys" \
-          -H "Authorization: Bearer ${{ "rnd_jVLom5W5VJCXweycehqwPCUBoDnk" }}" \
+          curl -X POST "https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }}/deploys" \
+          -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
           -H "Content-Type: application/json" \
           -d '{"clearCache": false}'
