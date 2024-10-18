@@ -1,12 +1,4 @@
-name: CI Pipeline
-
-on:
-  push:
-    branches:
-      - devops
-  pull_request:
-    branches:
-      - devops
+name: Build
 
 jobs:
   build:

@@ -1,3 +1,5 @@
+name: Deployement
+
 stages:
   - build
   - deploy
@@ -35,4 +37,4 @@ deploy:
       -H "Content-Type: application/json" \
       -d '{"clearCache": false}'
   only:
-    - main  # Déployer seulement quand on pousse sur la branche 'main'
+    - devops  # Déployer seulement quand on pousse sur la branche 'main'
