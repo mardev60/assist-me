@@ -1,10 +1,19 @@
 {
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "skipLibCheck": true,
+    "strict": true,
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "forceConsistentCasingInFileNames": true 
+  },
+  "ts-node": {
+    "transpileOnly": true,
     "compilerOptions": {
-      "target": "ES6",
-      "module": "CommonJS",
-      "outDir": "./dist",
-      "rootDir": "./",
-      "strict": true,
-      "esModuleInterop": true
+      "module": "ESNext"
     }
-}  
+  }
+}
