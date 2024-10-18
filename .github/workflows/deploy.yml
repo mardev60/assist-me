@@ -1,10 +1,5 @@
 name: Deployement
 
-variables:
-  RENDER_SERVICE_ID: "cs97c968ii6s73ev820g"  # ID du service sur Render
-  RENDER_API_KEY: "rnd_jVLom5W5VJCXweycehqwPCUBoDnk"
-
-
 on:
   push:
     branches:
@@ -39,7 +34,7 @@ jobs:
       - name: Deploy to Render
         run: |
           echo "Deploying to Render..."
-          curl -X POST "https://api.render.com/v1/services/${{ service.RENDER_SERVICE_ID }}/deploys" \
-          -H "Authorization: Bearer ${{ service.RENDER_API_KEY }}" \
+          curl -X POST "https://api.render.com/v1/services/${{ cs97c968ii6s73ev820g }}/deploys" \
+          -H "Authorization: Bearer ${{ rnd_jVLom5W5VJCXweycehqwPCUBoDnk }}" \
           -H "Content-Type: application/json" \
           -d '{"clearCache": false}'
