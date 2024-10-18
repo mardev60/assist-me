@@ -58,8 +58,6 @@ const useChat = () => {
     const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
     const handleSend = () => {
-        console.log("jey");
-
         if (input.trim()) {
             setMessages([
                 ...messages,

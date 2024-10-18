@@ -1,10 +1,12 @@
 import axios from "axios";
 import { FC, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Login: FC = () => {
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
+
+    const navigate = useNavigate();
 
     const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -15,6 +17,7 @@ const Login: FC = () => {
             });
             const token = response.data.token;
             localStorage.setItem("access_token", token);
+            navigate("/");
         } catch (error) {
             console.error("Login error:", error);
         }
