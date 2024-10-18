@@ -33,5 +33,9 @@
     "email": "stji@example.com",
     "password": "$2b$10$VwBCYPDc02Y.Q1YoRsO5H.8v/w2zrHklm3kZT8SDYfYoY9Njl/cMu",
     "username": "test"
+  },
+  {
+    "email": "manu@gmail.com",
+    "password": "$2b$10$e/SwUcQe7MRo17ec6ubizeo289LacyVJfBbEBPGEOWgRg/XYo4MgS"
   }
 ]
