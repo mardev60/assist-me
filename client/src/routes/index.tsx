@@ -3,13 +3,13 @@ import { Navigate, useRoutes } from "react-router";
 import { Homepage, Login, Register } from "../pages";
 
 const PublicGuard: FC<{ element: ReactNode }> = ({ element }) => {
-    const isAuthorized = true;
+    const isAuthorized = !localStorage.getItem("access_token");
 
     return isAuthorized ? <>{element}</> : <Navigate to="/" replace />;
 };
 
 const PrivateGuard: FC<{ element: ReactNode }> = ({ element }) => {
-    const isAuthorized = !!localStorage.getItem("authToken");
+    const isAuthorized = !!localStorage.getItem("access_token");
 
     return isAuthorized ? <>{element}</> : <Navigate to="/connexion" replace />;
 };
