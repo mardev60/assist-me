@@ -1,13 +1,24 @@
+import axios from "axios";
 import { FC, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Register: FC = () => {
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
+    const navigate = useNavigate();
 
-    const handleRegister = (event: React.FormEvent<HTMLFormElement>) => {
+    const handleRegister = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        console.log("Logging in with", { email, password });
+
+        try {
+            await axios.post("http://localhost:3000/register", {
+                email,
+                password,
+            });
+            navigate("/connexion");
+        } catch (error) {
+            console.error("Login error:", error);
+        }
     };
 
     return (
