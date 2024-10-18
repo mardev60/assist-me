@@ -1,13 +1,23 @@
+import axios from "axios";
 import { FC, useState } from "react";
-import { Link } from "react-router-dom"; // Assuming you're using react-router for navigation
+import { Link } from "react-router-dom";
 
 const Login: FC = () => {
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
 
-    const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
+    const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        console.log("Logging in with", { email, password });
+        try {
+            const response = await axios.post("http://localhost:3000/login", {
+                email,
+                password,
+            });
+            const token = response.data.token;
+            localStorage.setItem("access_token", token);
+        } catch (error) {
+            console.error("Login error:", error);
+        }
     };
 
     return (
