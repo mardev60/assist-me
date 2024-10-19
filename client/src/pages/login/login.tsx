@@ -1,6 +1,7 @@
 import axios from "axios";
 import { FC, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { API } from "../../env/variables";
 
 const Login: FC = () => {
     const [email, setEmail] = useState<string>("");
@@ -11,7 +12,7 @@ const Login: FC = () => {
     const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         try {
-            const response = await axios.post("http://localhost:3000/login", {
+            const response = await axios.post(`${API.URL}/login`, {
                 email,
                 password,
             });
