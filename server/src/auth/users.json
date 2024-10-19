@@ -35,7 +35,8 @@
     "username": "test"
   },
   {
-    "email": "manu@gmail.com",
-    "password": "$2b$10$e/SwUcQe7MRo17ec6ubizeo289LacyVJfBbEBPGEOWgRg/XYo4MgS"
+    "username": "test",
+    "email": "test@gmail.com",
+    "password": "$2b$10$k2QJ89maUQC2LlbK9jkODuxZCZMbdCKbWA2WEpK3MFZgtxpFOqWHm"
   }
 ]
