@@ -1,12 +1,16 @@
 import dotenv from 'dotenv';
-import { Anthropic } from '@anthropic-ai/sdk'; // Importer le SDK
+import { Anthropic } from '@anthropic-ai/sdk'; 
 
-dotenv.config();
+dotenv.config({ path: './.env' });
 
+if (!process.env.ANTHROPIC_API_KEY) {
+    console.error('Erreur : La clé d\'API Anthropic n\'est pas définie dans le fichier .env');
+}
 
 const anthropic = new Anthropic({
-    apiKey: process.env.ANTHROPIC_API_KEY || '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',
+    apiKey: process.env.ANTHROPIC_API_KEY,
 });
+
 
 export const sendMessageToClaude = async (message: string): Promise<any> => {
     try {
@@ -22,5 +26,3 @@ export const sendMessageToClaude = async (message: string): Promise<any> => {
         throw new Error('Erreur lors de la communication avec l\'API Claude');
     }
 }
-
-
