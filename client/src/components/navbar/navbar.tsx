@@ -12,7 +12,7 @@ const Navbar: FC = () => {
     return (
         <nav className="bg-blue-500 p-4">
             <div className="container mx-auto flex justify-between items-center">
-                <div className="text-white text-lg font-bold">Batoul</div>
+                <div className="text-white text-lg font-bold">Assist-Me</div>
                 <div className="flex space-x-4">
                     <button
                         onClick={handleLogout}

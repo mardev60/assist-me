@@ -1,17 +1,19 @@
 import { Message } from "@/types";
 import axios from "axios";
-import { useEffect, useRef, useState } from "react";
+import { KeyboardEvent, useEffect, useRef, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { API } from "../../env/variables";
 
 const useChat = () => {
     const [messages, setMessages] = useState<Message[]>([]);
     const [input, setInput] = useState<string>("");
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
     // Fonction pour envoyer un message
     const handleSend = async () => {
+        setIsLoading(true);
         if (input.trim()) {
             setMessages((prevMessages) => [
                 ...prevMessages,
@@ -24,6 +26,10 @@ const useChat = () => {
             message: input,
         });
 
+        if (claudeResponse) {
+            setIsLoading(false);
+        }
+
         setMessages((prevMessages) => [
             ...prevMessages,
             {
@@ -32,6 +38,13 @@ const useChat = () => {
                 fromMe: false,
             },
         ]);
+    };
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === "Enter") {
+            e.preventDefault(); // Empêche un retour à la ligne
+            handleSend(); // Appelle la fonction pour envoyer le message
+        }
     };
 
     // useEffect pour récupérer les messages lors du montage du composant
@@ -61,6 +74,8 @@ const useChat = () => {
         setInput,
         handleSend,
         messagesEndRef,
+        isLoading,
+        handleKeyDown,
     };
 };
 
