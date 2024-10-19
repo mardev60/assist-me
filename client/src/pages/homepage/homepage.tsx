@@ -8,7 +8,7 @@ const Homepage: FC = () => {
     return (
         <div className="conteneur max-h-screen flex flex-col">
             <Navbar />
-            <div className="contenu flex flex-col justify-between p-10 flex-grow overflow-y-auto">
+            <div className="flex flex-col justify-between p-10 flex-grow overflow-y-auto h-screen w-11/12 max-w-4xl mx-auto">
                 <MessageList
                     messages={messages}
                     messagesEndRef={messagesEndRef}

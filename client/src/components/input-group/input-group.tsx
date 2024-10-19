@@ -11,7 +11,7 @@ const InputGroup: FC<InputGroupProps> = (props) => {
     const { input, setInput, handleSend } = props;
 
     return (
-        <div className="flex p-4 border-t border-gray-300 border">
+        <div className="flex py-4 px-10 border-t border-gray-300 border">
             <input
                 type="text"
                 value={input}

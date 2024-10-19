@@ -1,33 +1,28 @@
-// src/controllers/chatController.ts
+// src/controllers/readMessageController.ts
 
-import { Request, Response } from 'express';
-import { sendMessageToClaude } from './claudeService';
+import { Request, Response } from "express";
+import { registerMessage } from "../chat/claudeService";
+import { sendMessageToClaude } from "./claudeService";
 
 // Contrôleur pour gérer les requêtes de chat
-export const chatController = async (req: Request, res: Response): Promise<void> => {
+export const sendMessageController = async (
+    req: Request,
+    res: Response
+): Promise<void> => {
+    const { message } = req.body;
+
+    if (!message) {
+        res.status(400).json({ error: "Message is required" });
+        return;
+    }
+
     try {
-        const { message } = req.body; // Récupérer le message
-
-        if (!message) {
-            res.status(400).json({ error: 'Message is required' });
-            return;
-        }
-
-        // Envoyer le message à l'API Claude
-        const response = await sendMessageToClaude(message);
-
-        // Retourner la réponse à l'utilisateur
-        res.json(response);
-    } catch (error) {
-        console.error('Erreur dans le chatController:', error);
-        if (error instanceof Error) {
-            res.status(500).json({ error: error.message });
-        } else {
-            res.status(500).json({ error: 'Erreur interne du serveur' });
-        }
+        const claudeResponse = await sendMessageToClaude(message);
+        const claudeMessage = claudeResponse.content[0].text;
+        await registerMessage(message);
+        await registerMessage(claudeMessage, false);
+        res.status(201).json({ claudeMessage });
+    } catch (error: any) {
+        res.status(400).json({ error: error.message });
     }
 };
-
-
-
-

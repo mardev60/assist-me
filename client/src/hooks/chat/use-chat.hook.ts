@@ -1,72 +1,56 @@
 import { Message } from "@/types";
+import axios from "axios";
 import { useEffect, useRef, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
+import { API } from "../../env/variables";
 
 const useChat = () => {
-    const [messages, setMessages] = useState<Message[]>([
-        {
-            id: 1,
-            text: "Bonjour! Comment puis-je vous aider aujourd'hui?",
-            fromUser: false,
-        },
-        {
-            id: 2,
-            text: "Pouvez-vous m'aider avec la programmation?",
-            fromUser: true,
-        },
-        { id: 3, text: "Bien sûr! Que voulez-vous savoir?", fromUser: false },
-        { id: 4, text: "Comment créer un composant React?", fromUser: true },
-        {
-            id: 5,
-            text: "Vous pouvez utiliser la fonction useState pour cela.",
-            fromUser: false,
-        },
-        { id: 6, text: "Merci! Et pour les hooks?", fromUser: true },
-        {
-            id: 7,
-            text: "Les hooks sont des fonctions qui vous permettent d'utiliser l'état et d'autres fonctionnalités de React.",
-            fromUser: false,
-        },
-        { id: 8, text: "Pouvez-vous donner un exemple?", fromUser: true },
-        { id: 9, text: "Bien sûr! Voici un exemple simple.", fromUser: false },
-        { id: 10, text: "Merci beaucoup!", fromUser: true },
-        {
-            id: 11,
-            text: "De rien! Avez-vous d'autres questions?",
-            fromUser: false,
-        },
-        { id: 12, text: "Non, c'est tout pour le moment.", fromUser: true },
-        {
-            id: 13,
-            text: "Très bien, passez une bonne journée!",
-            fromUser: false,
-        },
-        { id: 14, text: "Merci, vous aussi!", fromUser: true },
-        { id: 15, text: "Au revoir!", fromUser: false },
-        { id: 16, text: "Au revoir!", fromUser: true },
-        {
-            id: 17,
-            text: "Je suis toujours là si vous avez besoin de moi.",
-            fromUser: false,
-        },
-        { id: 18, text: "D'accord, merci!", fromUser: true },
-        { id: 19, text: "N'hésitez pas à revenir.", fromUser: false },
-        { id: 20, text: "Je le ferai. Merci encore!", fromUser: true },
-    ]);
-
+    const [messages, setMessages] = useState<Message[]>([]);
     const [input, setInput] = useState<string>("");
 
     const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
-    const handleSend = () => {
+    // Fonction pour envoyer un message
+    const handleSend = async () => {
         if (input.trim()) {
-            setMessages([
-                ...messages,
-                { id: messages.length + 1, text: input, fromUser: true },
+            setMessages((prevMessages) => [
+                ...prevMessages,
+                { id: uuidv4(), text: input, fromMe: true },
             ]);
             setInput("");
         }
+
+        const claudeResponse = await axios.post(`${API.URL}/chat`, {
+            message: input,
+        });
+
+        setMessages((prevMessages) => [
+            ...prevMessages,
+            {
+                id: uuidv4(),
+                text: claudeResponse.data.claudeMessage,
+                fromMe: false,
+            },
+        ]);
     };
 
+    // useEffect pour récupérer les messages lors du montage du composant
+    useEffect(() => {
+        const fetchMessages = async () => {
+            try {
+                const response = await axios.get<Message[]>(
+                    `${API.URL}/chat/messages`
+                );
+                setMessages(response.data);
+            } catch (error) {
+                console.error("Failed to load messages:", error);
+            }
+        };
+
+        fetchMessages();
+    }, []);
+
+    // useEffect pour faire défiler les messages vers le bas à chaque mise à jour
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [messages]);

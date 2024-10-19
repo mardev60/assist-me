@@ -10,17 +10,17 @@ const MessageList: FC<MessageListProps> = (props) => {
     const { messages, messagesEndRef } = props;
 
     return (
-        <div className="flex-1 overflow-y-auto p-4 border border-gray-300">
-            {messages.map((message) => (
+        <div className="flex-1 overflow-y-auto p-10 border border-gray-300">
+            {messages.map((message, index) => (
                 <div
-                    key={message.id}
+                    key={index}
                     className={`mb-2 ${
-                        message.fromUser ? "text-right" : "text-left"
+                        message.fromMe ? "text-right" : "text-left"
                     }`}
                 >
                     <div
                         className={`inline-block p-2 rounded-lg ${
-                            message.fromUser
+                            message.fromMe
                                 ? "bg-blue-500 text-white"
                                 : "bg-gray-200 text-black"
                         }`}
