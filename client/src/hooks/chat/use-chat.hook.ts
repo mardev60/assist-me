@@ -8,23 +8,30 @@ const useChat = () => {
     const [messages, setMessages] = useState<Message[]>([]);
     const [input, setInput] = useState<string>("");
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const token = localStorage.getItem("access_token");
 
     const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
-    // Fonction pour envoyer un message
     const handleSend = async () => {
         setIsLoading(true);
         if (input.trim()) {
             setMessages((prevMessages) => [
                 ...prevMessages,
-                { id: uuidv4(), text: input, fromMe: true },
+                { id: uuidv4(), message: input, fromUser: true },
             ]);
             setInput("");
         }
 
-        const claudeResponse = await axios.post(`${API.URL}/chat`, {
-            message: input,
-        });
+        const claudeResponse = await axios.post(
+            `${API.URL}/chat`,
+            { message: input },
+            {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        );
 
         if (claudeResponse) {
             setIsLoading(false);
@@ -34,8 +41,8 @@ const useChat = () => {
             ...prevMessages,
             {
                 id: uuidv4(),
-                text: claudeResponse.data.claudeMessage,
-                fromMe: false,
+                message: claudeResponse.data.message.text,
+                fromUser: false,
             },
         ]);
     };
@@ -52,8 +59,15 @@ const useChat = () => {
         const fetchMessages = async () => {
             try {
                 const response = await axios.get<Message[]>(
-                    `${API.URL}/chat/messages`
+                    `${API.URL}/chat/messages`,
+                    {
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
                 );
+
                 setMessages(response.data);
             } catch (error) {
                 console.error("Failed to load messages:", error);

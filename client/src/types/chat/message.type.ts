@@ -1,5 +1,5 @@
 export interface Message {
     id: string;
-    text: string;
-    fromMe: boolean;
+    message: string;
+    fromUser: boolean;
 }

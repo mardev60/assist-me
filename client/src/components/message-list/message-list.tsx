@@ -29,17 +29,17 @@ const MessageList: FC<MessageListProps> = (props) => {
                 <div
                     key={index}
                     className={`mb-2 ${
-                        message.fromMe ? "text-right" : "text-left"
+                        message.fromUser ? "text-right" : "text-left"
                     }`}
                 >
                     <div
                         className={`inline-block py-2 px-4 rounded-lg max-w-xl ${
-                            message.fromMe
+                            message.fromUser
                                 ? "bg-blue-500 text-white text-left"
                                 : "bg-gray-200 text-black"
                         }`}
                     >
-                        {message.text}
+                        {message.message}
                     </div>
                 </div>
             ))}

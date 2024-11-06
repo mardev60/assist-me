@@ -2,6 +2,7 @@ import axios from "axios";
 import { FC, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { API } from "../../env/variables";
+import logo from "../../assets/logo.png";
 
 const Register: FC = () => {
     const [email, setEmail] = useState<string>("");
@@ -28,6 +29,7 @@ const Register: FC = () => {
                 onSubmit={handleRegister}
                 className="w-full max-w-sm bg-white p-8 rounded-lg shadow-md"
             >
+                <img src={logo} alt="logo" className="w-19 h-14 mx-auto mb-5" />
                 <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">
                     Inscription
                 </h2>

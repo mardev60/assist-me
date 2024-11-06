@@ -3,7 +3,9 @@ import { User } from '../auth/models/userModel';
 declare global {
     namespace Express {
         interface Request {
-            user?: { email: string, username: string };
+            user?: {
+                roleId: number; email: string, username: string 
+};
         }
     }
 }
