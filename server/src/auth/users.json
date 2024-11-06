@@ -1,42 +1,12 @@
 [
-  {
-    "email": "utilisateur@example.com",
-    "password": "$2b$10$5Fs17Z/Lj5cneXhpxH5bkOxs5hgtXvqW.mhQdzr5CTnIpYrHKUB6m",
-    "username": "monNomUtilisateur"
-  },
-  {
-    "email": "test@example.com",
-    "password": "$2b$10$JRG/EHjBEevimWa.OXfDp.GBJ23h75DMaD440rRVAhRU/kBa406a.",
-    "username": "test"
-  },
-  {
-    "email": "test@example.com",
-    "password": "$2b$10$M1bO/rkjDww4WYkBEoh/5.9PVabwAs9bFKlGMTsK/mkXl3METQ7Rq",
-    "username": "test"
-  },
-  {
-    "email": "test@example.com",
-    "password": "$2b$10$nJkcQJlpJlW3MO7iZoTHROydAnnNarFggHBwRh9c/hBH5gjy74jFG",
-    "username": "test"
-  },
-  {
-    "email": "test@example.com",
-    "password": "$2b$10$1MLJpxCSq5vUqFznACpf6O0IpDFChnbEN4YTGCP7JVVua2XH1Tzy2",
-    "username": "test"
-  },
-  {
-    "email": "st@example.com",
-    "password": "$2b$10$BlKNvxWp7ph0BtpSVZyhYeEYo7bQV/.Ks.2v/dOMY0vKaNMf63su2",
-    "username": "test"
-  },
-  {
-    "email": "stji@example.com",
-    "password": "$2b$10$VwBCYPDc02Y.Q1YoRsO5H.8v/w2zrHklm3kZT8SDYfYoY9Njl/cMu",
-    "username": "test"
-  },
-  {
-    "username": "test",
-    "email": "test@gmail.com",
-    "password": "$2b$10$k2QJ89maUQC2LlbK9jkODuxZCZMbdCKbWA2WEpK3MFZgtxpFOqWHm"
-  }
+    {
+        "email": "utilisateur@example.com",
+        "password": "$2b$10$5Fs17Z/Lj5cneXhpxH5bkOxs5hgtXvqW.mhQdzr5CTnIpYrHKUB6m",
+        "username": "monNomUtilisateur"
+    },
+    {
+        "email": "test@example.com",
+        "password": "$2b$10$JRG/EHjBEevimWa.OXfDp.GBJ23h75DMaD440rRVAhRU/kBa406a.",
+        "username": "test"
+    }
 ]
