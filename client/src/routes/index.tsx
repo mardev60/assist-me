@@ -1,17 +1,54 @@
 import { FC, ReactNode } from "react";
 import { Navigate, useRoutes } from "react-router";
 import { Homepage, Login, Register } from "../pages";
+import axiosInstance from "../config/axiosConfig";
+
+import { useEffect, useState } from "react";
 
 const PublicGuard: FC<{ element: ReactNode }> = ({ element }) => {
-    const isAuthorized = !localStorage.getItem("access_token");
+    const [user, setUser] = useState<boolean | null>(null);
 
-    return isAuthorized ? <>{element}</> : <Navigate to="/" replace />;
+    useEffect(() => {
+        const fetchUser = async () => {
+            try {
+                const response = await axiosInstance.get("/me", { withCredentials: true });
+                setUser(!!response.data);
+            } catch {
+                setUser(false);
+            }
+        };
+
+        fetchUser();
+    }, []);
+
+    if (user === null) {
+        return null;
+    }
+
+    return !user ? <>{element}</> : <Navigate to="/" replace />;
 };
 
 const PrivateGuard: FC<{ element: ReactNode }> = ({ element }) => {
-    const isAuthorized = !!localStorage.getItem("access_token");
+    const [user, setUser] = useState<boolean | null>(null);
 
-    return isAuthorized ? <>{element}</> : <Navigate to="/connexion" replace />;
+    useEffect(() => {
+        const fetchUser = async () => {
+            try {
+                const response = await axiosInstance.get("/me", { withCredentials: true });
+                setUser(!!response.data);
+            } catch {
+                setUser(false);
+            }
+        };
+
+        fetchUser();
+    }, []);
+
+    if (user === null) {
+        return null;
+    }
+
+    return user ? <>{element}</> : <Navigate to="/connexion" replace />;
 };
 
 export function Router() {

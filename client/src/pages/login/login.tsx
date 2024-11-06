@@ -1,8 +1,7 @@
-import axios from "axios";
 import { FC, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { API } from "../../env/variables";
 import logo from "../../assets/logo.png";
+import axiosInstance  from "../../config/axiosConfig";
 
 const Login: FC = () => {
     const [email, setEmail] = useState<string>("");
@@ -14,13 +13,11 @@ const Login: FC = () => {
     const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         try {
-            const response = await axios.post(`${API.URL}/login`, {
+            await axiosInstance.post(`/login`, {
                 email,
                 password,
             });
-            const token = response.data.token;
-            setError("");
-            localStorage.setItem("access_token", token);
+
             navigate("/");
         } catch (error :  any) {
             if(error.status == 400){
