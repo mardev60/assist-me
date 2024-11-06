@@ -11,16 +11,6 @@ const useChat = () => {
 
     const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
-    // Récupérer le token du localStorage
-    const token = localStorage.getItem("access_token");
-
-    // Créer une instance Axios avec le token dans les en-têtes
-    const axiosInstance = axios.create({
-        headers: {
-            Authorization: `Bearer ${token}`,  // Inclure le token dans l'en-tête Authorization
-        },
-    });
-
     // Fonction pour envoyer un message
     const handleSend = async () => {
         setIsLoading(true);
@@ -32,24 +22,22 @@ const useChat = () => {
             setInput("");
         }
 
-        try {
-            const claudeResponse = await axiosInstance.post(`${API.URL}/chat`, {
-                message: input,
-            });
+        const claudeResponse = await axios.post(`${API.URL}/chat`, {
+            message: input,
+        });
 
-            setMessages((prevMessages) => [
-                ...prevMessages,
-                {
-                    id: uuidv4(),
-                    text: claudeResponse.data.message.text,
-                    fromMe: false,
-                },
-            ]);
-        } catch (error) {
-            console.error("Error sending message:", error);
-        } finally {
+        if (claudeResponse) {
             setIsLoading(false);
         }
+
+        setMessages((prevMessages) => [
+            ...prevMessages,
+            {
+                id: uuidv4(),
+                text: claudeResponse.data.message.text,
+                fromMe: false,
+            },
+        ]);
     };
 
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -63,7 +51,7 @@ const useChat = () => {
     useEffect(() => {
         const fetchMessages = async () => {
             try {
-                const response = await axiosInstance.get<Message[]>(
+                const response = await axios.get<Message[]>(
                     `${API.URL}/chat/messages`
                 );
                 setMessages(response.data);
