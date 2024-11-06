@@ -34,7 +34,7 @@ const useChat = () => {
             ...prevMessages,
             {
                 id: uuidv4(),
-                text: claudeResponse.data.claudeMessage,
+                text: claudeResponse.data.message.text,
                 fromMe: false,
             },
         ]);
