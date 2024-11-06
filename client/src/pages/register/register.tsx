@@ -7,6 +7,7 @@ import logo from "../../assets/logo.png";
 const Register: FC = () => {
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
+    const [errors, setErrors] = useState<{ [key: string]: string[] }>({});
     const navigate = useNavigate();
 
     const handleRegister = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -18,8 +19,26 @@ const Register: FC = () => {
                 password,
             });
             navigate("/connexion");
-        } catch (error) {
-            console.error("Login error:", error);
+        } catch (error: any) {
+            if (error.response && error.response.data.errors || error.response.data.error) {
+                if(error.response.data.errors){
+                const newErrors: { [key: string]: string[] } = {};
+                error.response.data.errors.forEach((err: any) => {
+                    const field = err.path;
+                    if (!newErrors[field]) {
+                        newErrors[field] = [];
+                    }
+                    newErrors[field].push(err.msg);
+                });
+                setErrors(newErrors);
+                }
+                else if(error.response.data.error){
+                    setErrors({email: [error.response.data.error]});
+                }
+
+            } else {
+                console.error("Erreur inconnue lors de l'inscription:", error);
+            }
         }
     };
 
@@ -33,6 +52,7 @@ const Register: FC = () => {
                 <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">
                     Inscription
                 </h2>
+
                 <div className="mb-4">
                     <label
                         className="block text-gray-700 text-sm font-bold mb-2"
@@ -48,7 +68,15 @@ const Register: FC = () => {
                         placeholder="john.doe@email.com"
                         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     />
+                    {errors.email && (
+                        <div className="text-red-500 text-xs mt-1">
+                            {errors.email.map((error, index) => (
+                                <div key={index}>{error}</div>
+                            ))}
+                        </div>
+                    )}
                 </div>
+
                 <div className="mb-6">
                     <label
                         className="block text-gray-700 text-sm font-bold mb-2"
@@ -64,7 +92,15 @@ const Register: FC = () => {
                         placeholder="********"
                         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
                     />
+                    {errors.password && (
+                        <div className="text-red-500 text-xs mt-1">
+                            {errors.password.map((error, index) => (
+                                <div key={index}>{error}</div>
+                            ))}
+                        </div>
+                    )}
                 </div>
+
                 <div className="flex items-center justify-between">
                     <button
                         type="submit"
@@ -73,6 +109,7 @@ const Register: FC = () => {
                         S'inscrire
                     </button>
                 </div>
+
                 <div className="mt-4 text-center">
                     Vous êtes déjà membre ?{" "}
                     <Link
