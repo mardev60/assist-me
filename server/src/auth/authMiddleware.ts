@@ -10,13 +10,14 @@ export const authenticateToken = (req: Request, res: Response, next: NextFunctio
         return;
     }
 
-    jwt.verify(token, 'abcd123', (err: any, user: any) => {
+    jwt.verify(token, 'abcd123', (err, user: any) => {
         if (err) {
             res.status(403).json({ message: 'Token invalide' });
             return;
         }
 
-        req.user = { email: user.email, username: user.username };
+        req.user = { email: user.email, username: user.username, roleId: user.roleId };
         next();
     });
 };
+
