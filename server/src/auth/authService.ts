@@ -1,7 +1,7 @@
 import { User } from './models/userModel';
 import * as fs from 'fs';
 import * as path from 'path';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
