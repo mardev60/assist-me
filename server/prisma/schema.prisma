@@ -12,7 +12,15 @@ model Users {
   name     String
   email    String     @unique
   password String
+  roleId   Int
   messages Messages[]
+  role     Roles      @relation(fields: [roleId], references: [id])
+}
+
+model Roles {
+  id    Int     @id @default(autoincrement())
+  name  String
+  Users Users[]
 }
 
 model Messages {
