@@ -1,7 +1,7 @@
 import { Message } from "@/types";
-import axiosInstance from "../../config/axiosConfig";
 import { KeyboardEvent, useEffect, useRef, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
+import axiosInstance from "../../config/axiosConfig";
 
 const useChat = () => {
     const [messages, setMessages] = useState<Message[]>([]);
@@ -20,7 +20,9 @@ const useChat = () => {
             setInput("");
         }
 
-        const claudeResponse = await axiosInstance.post(`/chat`,{ message: input }, {withCredentials: true});
+        const claudeResponse = await axiosInstance.post(`/chat`, {
+            message: input,
+        });
 
         if (claudeResponse) {
             setIsLoading(false);
@@ -47,7 +49,9 @@ const useChat = () => {
     useEffect(() => {
         const fetchMessages = async () => {
             try {
-                const response = await axiosInstance.get<Message[]>(`/chat/messages`, {withCredentials: true});
+                const response = await axiosInstance.get<Message[]>(
+                    `/chat/messages`
+                );
                 setMessages(response.data);
             } catch (error) {
                 console.error("Failed to load messages:", error);

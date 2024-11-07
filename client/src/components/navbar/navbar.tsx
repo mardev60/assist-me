@@ -1,11 +1,12 @@
 import { FC } from "react";
 import { useNavigate } from "react-router";
+import axiosInstance from "../../config/axiosConfig";
 
 const Navbar: FC = () => {
     const navigate = useNavigate();
 
-    const handleLogout = () => {
-        localStorage.removeItem("access_token");
+    const handleLogout = async () => {
+        await axiosInstance.post("/logout");
         navigate("/connexion");
     };
 

@@ -1,7 +1,7 @@
 import { FC, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../../assets/logo.png";
-import axiosInstance  from "../../config/axiosConfig";
+import axiosInstance from "../../config/axiosConfig";
 
 const Login: FC = () => {
     const [email, setEmail] = useState<string>("");
@@ -17,15 +17,10 @@ const Login: FC = () => {
                 email,
                 password,
             });
-
             navigate("/");
-        } catch (error :  any) {
-            if(error.status == 400){
-                setError("Données de connexion incorrectes.");
-            }
-            else {
-                setError("Une erreur s'est produite lors de la connexion");
-            }
+        } catch (error: unknown) {
+            console.error(error);
+            setError("Données de connexion incorrectes.");
         }
     };
 

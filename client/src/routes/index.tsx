@@ -1,54 +1,16 @@
 import { FC, ReactNode } from "react";
 import { Navigate, useRoutes } from "react-router";
+import { useAppAuth } from "../hooks/auth/use-auth.hook";
 import { Homepage, Login, Register } from "../pages";
-import axiosInstance from "../config/axiosConfig";
-
-import { useEffect, useState } from "react";
 
 const PublicGuard: FC<{ element: ReactNode }> = ({ element }) => {
-    const [user, setUser] = useState<boolean | null>(null);
-
-    useEffect(() => {
-        const fetchUser = async () => {
-            try {
-                const response = await axiosInstance.get("/me", { withCredentials: true });
-                setUser(!!response.data);
-            } catch {
-                setUser(false);
-            }
-        };
-
-        fetchUser();
-    }, []);
-
-    if (user === null) {
-        return null;
-    }
-
-    return !user ? <>{element}</> : <Navigate to="/" replace />;
+    const { authData } = useAppAuth();
+    return !authData ? <>{element}</> : <Navigate to="/" replace />;
 };
 
 const PrivateGuard: FC<{ element: ReactNode }> = ({ element }) => {
-    const [user, setUser] = useState<boolean | null>(null);
-
-    useEffect(() => {
-        const fetchUser = async () => {
-            try {
-                const response = await axiosInstance.get("/me", { withCredentials: true });
-                setUser(!!response.data);
-            } catch {
-                setUser(false);
-            }
-        };
-
-        fetchUser();
-    }, []);
-
-    if (user === null) {
-        return null;
-    }
-
-    return user ? <>{element}</> : <Navigate to="/connexion" replace />;
+    const { authData } = useAppAuth();
+    return authData ? <>{element}</> : <Navigate to="/connexion" replace />;
 };
 
 export function Router() {

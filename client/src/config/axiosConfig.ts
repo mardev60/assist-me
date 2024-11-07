@@ -1,12 +1,10 @@
-import axios from 'axios';
+import axios from "axios";
 
-const API_URL = 'http://localhost:3000/api';
+const API_URL = "http://localhost:3000/api";
 
 const axiosInstance = axios.create({
-    baseURL: API_URL, 
-    headers: {
-        'Content-Type': 'application/json',
-    },
+    baseURL: API_URL,
+    withCredentials: true,
 });
 
 axiosInstance.interceptors.response.use(
@@ -15,11 +13,12 @@ axiosInstance.interceptors.response.use(
     },
     (error) => {
         if (error.response && error.response.status === 401) {
-            window.location.href = "/connexion";
+            if (window.location.pathname !== "/connexion") {
+                window.location.href = "/connexion";
+            }
         }
         return Promise.reject(error);
     }
 );
 
 export default axiosInstance;
-
