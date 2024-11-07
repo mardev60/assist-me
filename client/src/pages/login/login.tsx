@@ -1,5 +1,5 @@
 import { FC, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import logo from "../../assets/logo.png";
 import axiosInstance from "../../config/axiosConfig";
 
@@ -8,16 +8,14 @@ const Login: FC = () => {
     const [password, setPassword] = useState<string>("");
     const [error, setError] = useState<string>("");
 
-    const navigate = useNavigate();
-
     const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         try {
-            await axiosInstance.post(`/login`, {
+            const login = await axiosInstance.post(`/login`, {
                 email,
                 password,
             });
-            navigate("/");
+            if (login.status === 200) window.location.href = "/";
         } catch (error: unknown) {
             console.error(error);
             setError("Données de connexion incorrectes.");
