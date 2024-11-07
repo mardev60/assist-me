@@ -1,34 +1,24 @@
-import axios from "axios";
 import { FC, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { API } from "../../env/variables";
+import { Link } from "react-router-dom";
 import logo from "../../assets/logo.png";
+import axiosInstance from "../../config/axiosConfig";
 
 const Login: FC = () => {
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [error, setError] = useState<string>("");
 
-    const navigate = useNavigate();
-
     const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         try {
-            const response = await axios.post(`${API.URL}/login`, {
+            const login = await axiosInstance.post(`/login`, {
                 email,
                 password,
             });
-            const token = response.data.token;
-            setError("");
-            localStorage.setItem("access_token", token);
-            navigate("/");
-        } catch (error :  any) {
-            if(error.status == 400){
-                setError("Données de connexion incorrectes.");
-            }
-            else {
-                setError("Une erreur s'est produite lors de la connexion");
-            }
+            if (login.status === 200) window.location.href = "/";
+        } catch (error: unknown) {
+            console.error(error);
+            setError("Données de connexion incorrectes.");
         }
     };
 

@@ -10,10 +10,8 @@ export const sendMessageController = async (
 ): Promise<void> => {
     const { message } = req.body;
 
-    const token = req?.headers?.authorization?.split(" ");
-    if (!token) return;
-
-    const decodedToken: { id: number } = jwtDecode(token[1]);
+    const token = req.cookies?.token;
+    const decodedToken: { id: number } = jwtDecode(token);
     const userId = decodedToken.id;
 
     if (!message) {
@@ -39,10 +37,8 @@ export const sendMessageController = async (
 
 export const getMessagesController = async (req: Request, res: Response) => {
     try {
-        const token = req?.headers?.authorization?.split(" ");
-        if (!token) return;
-        const decodedToken: { id: number } = jwtDecode(token[1]);
-        const userId = decodedToken.id;
+        const token = req.cookies?.token;
+        const userId = token.id;
 
         res.status(201).json(
             await prisma.messages.findMany({

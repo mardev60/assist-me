@@ -1,17 +1,16 @@
 import { FC, ReactNode } from "react";
 import { Navigate, useRoutes } from "react-router";
+import { useAppAuth } from "../hooks/auth/use-auth.hook";
 import { Homepage, Login, Register } from "../pages";
 
 const PublicGuard: FC<{ element: ReactNode }> = ({ element }) => {
-    const isAuthorized = !localStorage.getItem("access_token");
-
-    return isAuthorized ? <>{element}</> : <Navigate to="/" replace />;
+    const { authData } = useAppAuth();
+    return !authData ? <>{element}</> : <Navigate to="/" replace />;
 };
 
 const PrivateGuard: FC<{ element: ReactNode }> = ({ element }) => {
-    const isAuthorized = !!localStorage.getItem("access_token");
-
-    return isAuthorized ? <>{element}</> : <Navigate to="/connexion" replace />;
+    const { authData } = useAppAuth();
+    return authData ? <>{element}</> : <Navigate to="/connexion" replace />;
 };
 
 export function Router() {

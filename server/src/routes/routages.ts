@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
     loginController,
+    logoutController,
     meController,
     registerController,
 } from "../auth/authController";
@@ -17,6 +18,7 @@ const router = Router();
 router.post("/login", loginController);
 router.post("/register", registerController);
 router.get("/me", authenticateToken, meController, authorizeRole(1));
+router.post("/logout", logoutController);
 
 // Routes de chat
 router.post(
