@@ -10,8 +10,10 @@ COPY . .
 
 RUN npm run build
 
-FROM nginx:alpine
+FROM nginx:alpine AS runner
 
 COPY --from=builder /app/dist /usr/share/nginx/html
 
 EXPOSE 80
+
+ENTRYPOINT ["nginx", "-g", "daemon off;"]
