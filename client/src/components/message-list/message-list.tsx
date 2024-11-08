@@ -1,21 +1,15 @@
 import { Message } from "@/types";
-import { FC, MutableRefObject, useEffect } from "react";
+import { FC, MutableRefObject } from "react";
 import { Loader } from "../loader/loader";
 
 interface MessageListProps {
     messages: Message[];
     messagesEndRef: MutableRefObject<HTMLDivElement | null>;
-    isLoading: boolean; // Add this prop to manage the loading state
+    isLoading: boolean;
 }
 
 const MessageList: FC<MessageListProps> = (props) => {
     const { messages, messagesEndRef, isLoading } = props;
-
-    useEffect(() => {
-        if (messagesEndRef.current) {
-            messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
-        }
-    }, [messages, isLoading]);
 
     return (
         <div className="flex-1 overflow-y-auto p-10 border border-gray-300">

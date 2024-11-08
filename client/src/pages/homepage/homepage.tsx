@@ -1,33 +1,17 @@
 import { FC } from "react";
-import { InputGroup, MessageList, Navbar } from "../../components";
-import { useChat } from "../../hooks";
+import { Navbar } from "../../components";
+import { ConversationList } from "../../components/conversation-list";
 
 const Homepage: FC = () => {
-    const {
-        messages,
-        messagesEndRef,
-        setInput,
-        input,
-        handleSend,
-        isLoading,
-        handleKeyDown,
-    } = useChat();
-
     return (
-        <div className="conteneur max-h-screen flex flex-col">
+        <div className="max-h-screen flex flex-col bg-gray-200">
             <Navbar />
-            <div className="flex flex-col justify-between p-10 flex-grow overflow-y-auto h-screen w-11/12 max-w-4xl mx-auto">
-                <MessageList
-                    isLoading={isLoading}
-                    messages={messages}
-                    messagesEndRef={messagesEndRef}
-                />
-                <InputGroup
-                    setInput={setInput}
-                    handleKeyDown={handleKeyDown}
-                    input={input}
-                    handleSend={handleSend}
-                />
+            <div className="container p-10 w-8/12 flex overflow-y-auto h-screen mx-auto">
+                <div className="flex flex-grow">
+                    <div className="flex flex-col justify-between flex-grow h-full mx-auto">
+                        <ConversationList />
+                    </div>
+                </div>
             </div>
         </div>
     );

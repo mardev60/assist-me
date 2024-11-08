@@ -1,27 +1,29 @@
-import { FC, KeyboardEvent } from "react";
+import { FC } from "react";
 import { Button } from "../button";
 
 interface InputGroupProps {
     input: string;
     setInput: (value: string) => void;
     handleSend: () => void;
-    handleKeyDown: (e: KeyboardEvent) => void;
+    handleKeyDown: (
+        e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>
+    ) => void;
 }
 
 const InputGroup: FC<InputGroupProps> = (props) => {
-    const { input, setInput, handleSend, handleKeyDown } = props;
+    const { input, setInput, handleKeyDown, handleSend } = props;
 
     return (
-        <div className="flex py-4 px-10 border-t border-gray-300 border">
+        <div className="flex  mx-5">
             <input
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder="Tapez votre message ici..."
-                className="flex-1 p-2 border border-gray-300 rounded"
+                className="flex p-2 px-4 border border-gray-300 rounded w-full"
             />
-            <Button handleSend={handleSend} />
+            <Button onClick={handleSend} className="px-4" />
         </div>
     );
 };

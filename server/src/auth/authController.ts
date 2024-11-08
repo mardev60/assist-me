@@ -64,8 +64,8 @@ export const meController = (req: Request, res: Response): void => {
         res.status(400).json({ error: "Utilisateur non authentifié" });
         return;
     }
-    const { email, username } = req.user;
-    res.status(200).json({ email, username });
+    const { email } = req.user;
+    res.status(200).json({ email });
 };
 
 export const logoutController = (req: Request, res: Response): void => {

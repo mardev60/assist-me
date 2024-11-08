@@ -1,5 +1,6 @@
 export interface Message {
-    id: string;
+    id?: number;
     message: string;
     fromUser: boolean;
+    conversationId?: number;
 }

@@ -1,79 +1,159 @@
-import { Message } from "@/types";
-import { KeyboardEvent, useEffect, useRef, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
+import { Conversation, Message } from "../../types";
+import { useEffect, useRef, useState } from "react";
 import axiosInstance from "../../config/axiosConfig";
 
-const useChat = () => {
+interface UseChatProps {
+    selectedConversationId: number;
+    setSelectedConversationId: (id: number) => void;
+}
+
+const useChat = (props: UseChatProps) => {
+    const { selectedConversationId, setSelectedConversationId } = props;
     const [messages, setMessages] = useState<Message[]>([]);
+    const [conversations, setConversations] = useState<Conversation[]>([]);
     const [input, setInput] = useState<string>("");
     const [isLoading, setIsLoading] = useState<boolean>(false);
-
     const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
-    const handleSend = async () => {
-        setIsLoading(true);
+    const handleSend = async (convId: number) => {
         if (input.trim()) {
-            setMessages((prevMessages) => [
-                ...prevMessages,
-                { id: uuidv4(), message: input, fromUser: true },
-            ]);
+            await sendMessage(input, convId);
             setInput("");
         }
+    };
 
-        const claudeResponse = await axiosInstance.post(`/chat`, {
-            message: input,
-        });
-
-        if (claudeResponse) {
-            setIsLoading(false);
+    const handleDelete = async (conversationId: number) => {
+        try {
+            await axiosInstance.post("/chat/delete", {
+                conversationId: conversationId,
+            });
+            setConversations((prev) =>
+                prev.filter((conv) => Number(conv.id) !== conversationId)
+            );
+            if (conversationId === selectedConversationId) {
+                setSelectedConversationId(0);
+            }
+        } catch (error) {
+            console.error(
+                "Erreur lors de la suppression de la conversation",
+                error
+            );
         }
+    };
 
+    const sendMessage = async (message: string, convId: number) => {
+        addUserMessage(message);
+
+        if (convId === 0) {
+            await createConversation(message);
+        } else {
+            await sendToClaude(message, convId);
+        }
+    };
+
+    const addUserMessage = (message: string) => {
         setMessages((prevMessages) => [
             ...prevMessages,
             {
-                id: uuidv4(),
-                message: claudeResponse.data.message.text,
-                fromUser: false,
+                message,
+                fromUser: true,
+                conversationId: selectedConversationId,
             },
         ]);
+        setIsLoading(true);
     };
 
-    const handleKeyDown = (e: KeyboardEvent) => {
-        if (e.key === "Enter") {
-            e.preventDefault(); // Empêche un retour à la ligne
-            handleSend(); // Appelle la fonction pour envoyer le message
+    const createConversation = async (conversationName: string) => {
+        try {
+            const response = await axiosInstance.post("/chat/create", {
+                conversationName,
+            });
+            const newConversationId = response.data.conversationId;
+            await sendToClaude(conversationName, newConversationId);
+            setSelectedConversationId(newConversationId);
+        } catch (error) {
+            console.error(
+                "Erreur lors de la création de la conversation",
+                error
+            );
         }
     };
 
-    // useEffect pour récupérer les messages lors du montage du composant
+    const sendToClaude = async (message: string, conversationId: number) => {
+        try {
+            const response = await axiosInstance.post(`/chat`, {
+                message,
+                conversationId,
+            });
+            addClaudeMessage(response.data.message.text);
+        } catch (error) {
+            console.error("Erreur lors de l'envoi du message", error);
+        }
+    };
+
+    const addClaudeMessage = (message: string) => {
+        setMessages((prevMessages) => [
+            ...prevMessages,
+            {
+                message,
+                fromUser: false,
+                conversationId: selectedConversationId,
+            },
+        ]);
+        setIsLoading(false);
+    };
+
+    const fetchMessagesForConversation = async (conversationId: number) => {
+        try {
+            const response = await axiosInstance.get<Message[]>(
+                `/chat/messages?conversationId=${conversationId}`
+            );
+            setMessages(response.data);
+        } catch (error) {
+            console.error("Failed to load messages:", error);
+        }
+    };
+
+    // Charger les messages chaque fois que selectedConversationId change
     useEffect(() => {
-        const fetchMessages = async () => {
+        if (selectedConversationId) {
+            fetchMessagesForConversation(selectedConversationId);
+        }
+    }, [selectedConversationId]);
+
+    useEffect(() => {
+        const fetchConversations = async () => {
             try {
-                const response = await axiosInstance.get<Message[]>(
-                    `/chat/messages`
+                const response = await axiosInstance.get<Conversation[]>(
+                    "/chat/conversation-list"
                 );
-                setMessages(response.data);
+                setConversations(response.data);
             } catch (error) {
-                console.error("Failed to load messages:", error);
+                console.error(
+                    "Erreur lors de la récupération des conversations",
+                    error
+                );
             }
         };
 
-        fetchMessages();
-    }, []);
+        fetchConversations();
+    }, [selectedConversationId]);
 
-    // useEffect pour faire défiler les messages vers le bas à chaque mise à jour
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [messages]);
 
     return {
         messages,
+        conversations,
         input,
         setInput,
         handleSend,
+        handleDelete,
         messagesEndRef,
         isLoading,
-        handleKeyDown,
+        handleSelectConversation: setSelectedConversationId,
+        handleCreateConversation: () => setSelectedConversationId(0),
     };
 };
 
