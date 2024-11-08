@@ -8,28 +8,38 @@ export const sendMessageController = async (
     req: Request,
     res: Response
 ): Promise<void> => {
-    const { message } = req.body;
+    const { message, conversationId } = req.body;
 
     const token = req.cookies?.token;
     const decodedToken: { id: number } = jwtDecode(token);
     const userId = decodedToken.id;
 
-    if (!message) {
+    if (!message || !conversationId) {
         res.status(400).json({ error: "Message is required" });
         return;
     }
 
     try {
         const response = await sendMessageToAi(message);
-        const messageResponse = response.choices[0].message.content;
+
+        const messageResponse = response.claudeResponse;
+        const conversationTitle = response.conversationTitle;
+
+        await saveMessage(message, userId, true, conversationId);
+        await saveMessage(messageResponse, userId, false, conversationId);
+
+        res.status(201).json({
+            message: {
+                text: messageResponse,
+                conversationTitle: conversationTitle,
+                test: "test",
+            },
+        });
+
         // const claudeResponse = await sendMessageToClaude(message);
         // const claudeMessage = claudeResponse.content[0].text;
         // await registerMessage(message);
         // await registerMessage(claudeMessage, false);
-
-        await saveMessage(message, userId, true);
-        await saveMessage(messageResponse, userId, false);
-        res.status(201).json({ message: { text: messageResponse } });
     } catch (error: any) {
         res.status(400).json({ error: error.message });
     }

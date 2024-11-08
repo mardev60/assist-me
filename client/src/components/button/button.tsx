@@ -1,16 +1,17 @@
 import { FC } from "react";
 
 interface ButtonProps {
-    handleSend: () => void;
+    onClick: () => void;
+    className?: string;
 }
 
 const Button: FC<ButtonProps> = (props) => {
-    const { handleSend } = props;
+    const { onClick, className } = props;
 
     return (
         <button
-            onClick={handleSend}
-            className="ml-4 p-2 bg-blue-500 text-white rounded hover:bg-blue-700"
+            onClick={onClick}
+            className={`ml-4 p-2 bg-blue-500 text-white rounded hover:bg-blue-700 ${className}`}
         >
             Envoyer
         </button>

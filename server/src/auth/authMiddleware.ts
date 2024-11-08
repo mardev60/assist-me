@@ -20,10 +20,11 @@ export const authenticateToken = (
         }
 
         req.user = {
+            id: user.id,
             email: user.email,
-            username: user.username,
             roleId: user.roleId,
         };
+
         next();
     });
 };
